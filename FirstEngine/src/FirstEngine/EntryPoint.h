@@ -12,4 +12,13 @@ int main(int argc, char** argv)
 	app->Run();
 	delete app;
 }
+
+int WINAPI wWinMain(
+	HINSTANCE hInstance,
+	HINSTANCE prevInstance,
+	LPWSTR cmd,
+	int nCmdShow)
+{
+	return 0;
+}
 #endif

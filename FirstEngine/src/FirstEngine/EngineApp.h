@@ -41,6 +41,13 @@ namespace Ferrus {
 			LPARAM lParam
 		);
 
+
+		HWND m_hwnd;
+		ID2D1Factory* m_pDirect2dFactory;
+		ID2D1HwndRenderTarget* m_pRenderTarget;
+		ID2D1SolidColorBrush* m_pLightSlateGrayBrush;
+		ID2D1SolidColorBrush* m_pCornflowerBlueBrush;
+
 	};
 
 
