@@ -63,7 +63,7 @@ HRESULT DemoApp::Initialize()
         // the actual DPI from the HWND (which will be assigned by whichever monitor
         // the window is created on). Then we use SetWindowPos to resize it to the
         // correct DPI-scaled size, then we use ShowWindow to show it.
-
+        
         m_hwnd = CreateWindow(
             L"D2DDemoApp",
             L"Direct2D demo application",

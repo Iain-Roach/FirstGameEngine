@@ -25,13 +25,18 @@ namespace Ferrus
 		}
 	}
 
+    HRESULT EngineApp::CreateDeviceIndependentResources()
+    {
+        return E_NOTIMPL;
+    }
+
     HRESULT EngineApp::Initialize()
     {
         HRESULT hr;
 
         // Initialize device-indpendent resources, such
         // as the Direct2D factory.
-        hr = CreateDeviceIndependentResources();
+        //hr = CreateDeviceIndependentResources();
 
         if (SUCCEEDED(hr))
         {
@@ -55,8 +60,8 @@ namespace Ferrus
             // the window is created on). Then we use SetWindowPos to resize it to the
             // correct DPI-scaled size, then we use ShowWindow to show it.
 
-            
-
+           
+            // why error????
             m_hwnd = CreateWindow(
                 L"D2DDemoApp",
                 L"Direct2D demo application",
