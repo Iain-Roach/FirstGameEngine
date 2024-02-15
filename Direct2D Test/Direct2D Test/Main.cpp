@@ -11,6 +11,8 @@ DemoApp::DemoApp() :
     m_pCornflowerBlueBrush(NULL)
 {}
 
+
+// Releases the interfaces that are stored as class members
 DemoApp::~DemoApp()
 {
     SafeRelease(&m_pDirect2dFactory);
@@ -19,6 +21,7 @@ DemoApp::~DemoApp()
     SafeRelease(&m_pCornflowerBlueBrush);
 }
 
+// Allows window to run
 void DemoApp::RunMessageLoop()
 {
     MSG msg;
@@ -30,6 +33,7 @@ void DemoApp::RunMessageLoop()
     }
 }
 
+// Creates window and shows it.
 HRESULT DemoApp::Initialize()
 {
     HRESULT hr;
@@ -95,6 +99,7 @@ HRESULT DemoApp::Initialize()
     return hr;
 }
 
+// Device independent resources that can last for duration of application
 HRESULT DemoApp::CreateDeviceIndependentResources()
 {
     HRESULT hr = S_OK;
@@ -105,6 +110,9 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
     return hr;
 }
 
+// creates the window's device-dependent resources
+// Render target
+// Two brushes
 HRESULT DemoApp::CreateDeviceResources()
 {
     HRESULT hr = S_OK;
@@ -126,6 +134,7 @@ HRESULT DemoApp::CreateDeviceResources()
             &m_pRenderTarget
         );
 
+        // Brushes are essentially colors that you can use to color objects
         if (SUCCEEDED(hr))
         {
             // Create a gray brush.
@@ -147,6 +156,7 @@ HRESULT DemoApp::CreateDeviceResources()
     return hr;
 }
 
+// Releases the render target and two brushes
 void DemoApp::DiscardDeviceResources()
 {
     SafeRelease(&m_pRenderTarget);
@@ -154,6 +164,10 @@ void DemoApp::DiscardDeviceResources()
     SafeRelease(&m_pCornflowerBlueBrush);
 }
 
+// Handles window messages
+// Resizing
+// Quit
+// Things need to be rendered
 LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT result = 0;
@@ -231,17 +245,29 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
     return result;
 }
 
+// Render time
 HRESULT DemoApp::OnRender()
 {
+
+    // Define hr
     HRESULT hr = S_OK;
 
     hr = CreateDeviceResources();
+    // Only continue if CreateDeviceResource sucessfully created resources
     if (SUCCEEDED(hr))
     {
+        // Begin draw to begin drawing :O
         m_pRenderTarget->BeginDraw();
+        // Set transform to the identity matrix ( we are zeroing everything out)
         m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+        // Clears the window
         m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
+
+        // Get the size of the rendertarget
         D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
+
+
+        // For sprites use ID2D1SpriteBatch
 
         // Draw a grid background.
         int width = static_cast<int>(rtSize.width);
@@ -288,9 +314,12 @@ HRESULT DemoApp::OnRender()
         // Draw the outline of a rectangle.
         m_pRenderTarget->DrawRectangle(&rectangle2, m_pCornflowerBlueBrush);
 
+
+        // EndDraw() to end draw :O
         hr = m_pRenderTarget->EndDraw();
     }
 
+    // Checks if the render target needs to be recreated
     if (hr == D2DERR_RECREATE_TARGET)
     {
         hr = S_OK;
@@ -300,6 +329,7 @@ HRESULT DemoApp::OnRender()
     return hr;
 }
 
+// Resizes the render target to the size of the window
 void DemoApp::OnResize(UINT width, UINT height)
 {
     if (m_pRenderTarget)
@@ -311,7 +341,7 @@ void DemoApp::OnResize(UINT width, UINT height)
     }
 }
 
-// Entrypoint
+// Entrypoint initializes instance of Demoapp and begins message loop
 int WINAPI WinMain(
     HINSTANCE /* hInstance */,
     HINSTANCE /* hPrevInstance */,

@@ -13,6 +13,8 @@
 #include <dwrite.h>
 #include <wincodec.h>
 
+// functions for releasing interfaces and macros for error handling + retrieving the modules base address
+
 template<class Interface>
 inline void SafeRelease(
     Interface** ppInterfaceToRelease)
