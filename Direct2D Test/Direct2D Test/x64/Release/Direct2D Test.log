@@ -1,0 +1,7 @@
+﻿  Main.cpp
+E:\Repo\IndependentStudyEngine\FirstEngine\Direct2D Test\Direct2D Test\Main.cpp(84,23): warning C4244: 'initializing': conversion from 'UINT' to 'float', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 35 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Direct2D Test.vcxproj -> E:\Repo\IndependentStudyEngine\FirstEngine\Direct2D Test\x64\Release\Direct2D Test.exe

@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>E:\Repo\IndependentStudyEngine\FirstEngine\Direct2D Test\x64\Debug\Direct2D Test.exe</FullPath>
+      <FullPath>E:\Repo\IndependentStudyEngine\FirstEngine\Direct2D Test\x64\Release\Direct2D Test.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
