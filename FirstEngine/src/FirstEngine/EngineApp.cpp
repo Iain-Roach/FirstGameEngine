@@ -3,7 +3,7 @@
 
 namespace Ferrus
 {
-	EngineApp::EngineApp() : m_hwnd(NULL), m_pDirect2dFactory(NULL), m_pRenderTarget(NULL), m_pLightSlateGrayBrush(NULL), m_pCornflowerBlueBrush(NULL)
+	EngineApp::EngineApp() : m_hwnd(NULL), m_pDirect2dFactory(NULL), m_pRenderTarget(NULL), m_pLightSlateGrayBrush(NULL), m_pCornflowerBlueBrush(NULL), rectangles{}
 	{
 	}
 	EngineApp::~EngineApp()
@@ -24,6 +24,21 @@ namespace Ferrus
 			DispatchMessage(&msg);
 		}
 	}
+
+    // Maybe use dictionary to split between if you want the rectangle to be filled or not using keys?
+    void EngineApp::CreateRect(float left, float right, float top, float bottom)
+    {
+
+        D2D1_RECT_F rect = D2D1::RectF(
+            left,
+            top,
+            right,
+            bottom
+        );
+
+        rectangles.push_back(rect);
+
+    }
 
     HRESULT EngineApp::CreateDeviceIndependentResources()
     {
@@ -285,8 +300,18 @@ namespace Ferrus
                 rtSize.height / 2 + 100.0f
             );
 
-            // Draw a filled rectangle.
-            m_pRenderTarget->FillRectangle(&rectangle1, m_pLightSlateGrayBrush);
+
+            for (int i = 0; i < rectangles.size(); i++)
+            {
+                if (i == 0)
+                {
+                    // Draw a filled rectangle.
+                    m_pRenderTarget->FillRectangle(&rectangle1, m_pLightSlateGrayBrush);
+                }
+                m_pRenderTarget->FillRectangle(&rectangles[i], m_pCornflowerBlueBrush);
+            }
+
+            
 
             // Draw the outline of a rectangle.
             m_pRenderTarget->DrawRectangle(&rectangle2, m_pCornflowerBlueBrush);

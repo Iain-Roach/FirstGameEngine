@@ -18,5 +18,7 @@ private:
 
 Ferrus::EngineApp* Ferrus::CreateApplication()
 {
-	return new TestSite();
+	Ferrus::EngineApp* app = new Ferrus::EngineApp;
+	app->CreateRect(50.0f, 100.0f, 50.0f, 150.0f);
+	return app;
 }
