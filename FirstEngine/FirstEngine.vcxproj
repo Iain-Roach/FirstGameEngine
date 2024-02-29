@@ -86,6 +86,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FirstEngine\Entity.h" />
+    <ClInclude Include="src\FirstEngine\Component.h" />
+    <ClInclude Include="src\FirstEngine\Registry.h" />
     <ClInclude Include="src\Ferrus.h" />
     <ClInclude Include="src\FirstEngine\EngineApp.h" />
     <ClInclude Include="src\FirstEngine\EngineCore.h" />
@@ -93,6 +96,8 @@
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FirstEngine\Entity.cpp" />
+    <ClCompile Include="src\FirstEngine\Registry.cpp" />
     <ClCompile Include="src\FirstEngine\EngineApp.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>

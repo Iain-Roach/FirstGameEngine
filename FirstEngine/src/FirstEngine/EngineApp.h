@@ -2,6 +2,7 @@
 
 
 #include "EngineCore.h"
+#include "Registry.h"
 #include <vector>
 #include <wrl/client.h>
 #include <memory>
@@ -22,6 +23,10 @@ namespace Ferrus {
 		void RunMessageLoop();
 
 		void CreateRect(float left, float right, float top, float bottom);
+		
+		void InitRegistry();
+
+		Registry& GetRegistry();
 		
 		
 	private:
@@ -60,6 +65,7 @@ namespace Ferrus {
 		
 
 		std::vector<D2D1_RECT_F> rectangles;
+		Registry registry;
 
 	};
 

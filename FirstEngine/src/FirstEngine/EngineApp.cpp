@@ -40,6 +40,18 @@ namespace Ferrus
 
     }
 
+    void EngineApp::InitRegistry()
+    {
+        registry = Registry();
+    }
+
+    Registry& EngineApp::GetRegistry()
+    {
+        return registry;
+    }
+
+   
+
     HRESULT EngineApp::CreateDeviceIndependentResources()
     {
         HRESULT hr = S_OK;
@@ -299,17 +311,32 @@ namespace Ferrus
                 rtSize.width / 2 + 100.0f,
                 rtSize.height / 2 + 100.0f
             );
-
+            
 
             for (int i = 0; i < rectangles.size(); i++)
             {
                 if (i == 0)
                 {
                     // Draw a filled rectangle.
-                    m_pRenderTarget->FillRectangle(&rectangle1, m_pLightSlateGrayBrush);
+                    /*m_pRenderTarget->FillRectangle(&rectangle1, m_pLightSlateGrayBrush);*/
                 }
                 m_pRenderTarget->FillRectangle(&rectangles[i], m_pCornflowerBlueBrush);
             }
+
+            for (const auto& pair : registry.GetSprites())
+            {
+                size_t entityID = pair.first;
+                const SpriteComponent& sprite = pair.second;
+
+                
+
+                D2D1_RECT_F spriteRectangle = D2D1::RectF(
+                    sprite.left, sprite. top, sprite.right, sprite.bottom
+                );
+
+                m_pRenderTarget->FillRectangle(&spriteRectangle, m_pCornflowerBlueBrush);
+            }
+
 
             
 

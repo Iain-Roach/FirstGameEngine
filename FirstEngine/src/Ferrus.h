@@ -1,7 +1,12 @@
 #pragma once
 
 #include "FirstEngine/EngineApp.h"
+#include "FirstEngine/Component.h"
+#include "FirstEngine/Entity.h"
+#include "FirstEngine/Registry.h"
 #include <stdio.h>
+#include <vector>
+#include <unordered_map>
 
 // Windows header files:
 #include <Windows.h>
