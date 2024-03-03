@@ -1,33 +1,43 @@
 #pragma once
 #include "EngineCore.h"
-#include "Entity.h"
 #include <unordered_map>
 #include "Component.h"
 
 
 namespace Ferrus {
-	class FERRUS_API Registry
+	using EntityID = size_t;
+	class  FERRUS_API Registry
 	{
 	public:
 		Registry();
+		
 
-		size_t CreateEntity();
+		EntityID CreateEntity();
 
-		void AddSpriteComponent(size_t entityID, SpriteComponent component);
+		void AddSpriteComponent(EntityID entityID, const SpriteComponent& component);
+		void AddTransformComponent(EntityID entityID, const TransformComponent& component);
 
+		bool HasSpriteComponent(EntityID entityID) const;
+		bool HasTransformComponent(EntityID entityID) const;
 
-		Entity& GetEntityByID(size_t entityID);
+		const SpriteComponent& GetSpriteComponent(EntityID entityID) const;
+		const TransformComponent& GetTransformComponent(EntityID entityID) const;
 
-		size_t GetNextEntityID();
+		EntityID GetNextEntityID();
 
-		std::unordered_map<size_t, SpriteComponent> GetSprites();
+		std::unordered_map<EntityID, SpriteComponent> GetSprites();
+		std::unordered_map<EntityID, TransformComponent> GetTransforms();
+
+		void LoadSpriteComponentBitmap(SpriteComponent& spriteComponent);
+
 
 
 	private:
-		size_t nextEntityID = 0;
-		std::unordered_map<size_t, Entity> m_entities;
+		EntityID nextEntityID = 0;
 
-		std::unordered_map<size_t, SpriteComponent> m_sprites;
+		std::unordered_map<EntityID, TransformComponent> transforms;
+		std::unordered_map<EntityID, SpriteComponent> sprites;
+		
 	};
 }
 

@@ -1,11 +1,10 @@
 #pragma once
-
-
 #include "EngineCore.h"
 #include "Registry.h"
 #include <vector>
 #include <wrl/client.h>
 #include <memory>
+
 
 namespace Ferrus {
 
@@ -27,11 +26,14 @@ namespace Ferrus {
 		void InitRegistry();
 
 		Registry& GetRegistry();
+
+		ID2D1Bitmap* LoadBitmap(const std::wstring& filePath);
 		
 		
 	private:
 		// Initialize device-independent resources.
 		HRESULT CreateDeviceIndependentResources();
+		
 
 		// Initialize device-dependent resources.
 		HRESULT CreateDeviceResources();
