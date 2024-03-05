@@ -2,6 +2,7 @@
 #include <d2d1.h>
 #include <wincodec.h>
 
+
 namespace Ferrus
 {
     EngineApp::EngineApp() : m_hwnd(NULL), m_pDirect2dFactory(NULL), m_pRenderTarget(NULL), m_pLightSlateGrayBrush(NULL), m_pCornflowerBlueBrush(NULL), rectangles{}
@@ -288,82 +289,7 @@ namespace Ferrus
         while (true);
     }
 
-    LRESULT CALLBACK EngineApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-    {
-        LRESULT result = 0;
-
-        if (message == WM_CREATE)
-        {
-            LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;
-            EngineApp* pEngineApp = (EngineApp*)pcs->lpCreateParams;
-
-            ::SetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA,
-                reinterpret_cast<LONG_PTR>(pEngineApp)
-            );
-
-            result = 1;
-        }
-        else
-        {
-            EngineApp* pEngineApp = reinterpret_cast<EngineApp*>(static_cast<LONG_PTR>(
-                ::GetWindowLongPtrW(
-                    hwnd,
-                    GWLP_USERDATA
-                )));
-
-            bool wasHandled = false;
-
-            if (pEngineApp)
-            {
-                switch (message)
-                {
-                case WM_SIZE:
-                {
-                    UINT width = LOWORD(lParam);
-                    UINT height = HIWORD(lParam);
-                    pEngineApp->OnResize(width, height);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
-
-                case WM_DISPLAYCHANGE:
-                {
-                    InvalidateRect(hwnd, NULL, FALSE);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
-
-                case WM_PAINT:
-                {
-                    pEngineApp->OnRender();
-                    ValidateRect(hwnd, NULL);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
-
-                case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
-                }
-            }
-
-            if (!wasHandled)
-            {
-                result = DefWindowProc(hwnd, message, wParam, lParam);
-            }
-        }
-
-        return result;
-    }
+    
 
     HRESULT EngineApp::OnRender()
     {
@@ -488,5 +414,86 @@ namespace Ferrus
             // the next time EndDraw is called.
             m_pRenderTarget->Resize(D2D1::SizeU(width, height));
         }
+    }
+
+    LRESULT CALLBACK EngineApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+    {
+        if (message == WM_DESTROY) { PostQuitMessage(0); return 0; }
+        
+        DefWindowProcW(hwnd, message, wParam, lParam);
+        
+        /*LRESULT result = 0;
+
+        if (message == WM_CREATE)
+        {
+            LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;
+            EngineApp* pEngineApp = (EngineApp*)pcs->lpCreateParams;
+
+            ::SetWindowLongPtrW(
+                hwnd,
+                GWLP_USERDATA,
+                reinterpret_cast<LONG_PTR>(pEngineApp)
+            );
+
+            result = 1;
+        }
+        else
+        {
+            EngineApp* pEngineApp = reinterpret_cast<EngineApp*>(static_cast<LONG_PTR>(
+                ::GetWindowLongPtrW(
+                    hwnd,
+                    GWLP_USERDATA
+                )));
+
+            bool wasHandled = false;
+
+            if (pEngineApp)
+            {
+                switch (message)
+                {
+                case WM_SIZE:
+                {
+                    UINT width = LOWORD(lParam);
+                    UINT height = HIWORD(lParam);
+                    pEngineApp->OnResize(width, height);
+                }
+                result = 0;
+                wasHandled = true;
+                break;
+
+                case WM_DISPLAYCHANGE:
+                {
+                    InvalidateRect(hwnd, NULL, FALSE);
+                }
+                result = 0;
+                wasHandled = true;
+                break;
+
+                case WM_PAINT:
+                {
+                    pEngineApp->OnRender();
+                    ValidateRect(hwnd, NULL);
+                }
+                result = 0;
+                wasHandled = true;
+                break;
+
+                case WM_DESTROY:
+                {
+                    PostQuitMessage(0);
+                }
+                result = 1;
+                wasHandled = true;
+                break;
+                }
+            }
+
+            if (!wasHandled)
+            {
+                result = DefWindowProc(hwnd, message, wParam, lParam);
+            }
+        }
+
+        return result;*/
     }
 }
