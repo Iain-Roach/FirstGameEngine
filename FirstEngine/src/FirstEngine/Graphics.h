@@ -1,9 +1,8 @@
-#pragma 
-#include <Windows.h>
-#include <d2d1.h>
+#pragma once
+#include "EngineCore.h"
 
 
-namespace Ferrus {
+
 	class Graphics
 	{
 	public:
@@ -20,6 +19,6 @@ namespace Ferrus {
 
 
 	};
-}
+
 
 

@@ -42,121 +42,6 @@ namespace Ferrus
 
     }
 
-    void EngineApp::InitRegistry()
-    {
-        registry = Registry();
-    }
-
-    Registry& EngineApp::GetRegistry()
-    {
-        return registry;
-    }
-
-    ID2D1Bitmap* EngineApp::LoadBitmap(const std::wstring& filePath)
-    {
-        ID2D1Bitmap* bitmap = nullptr;
-        IWICBitmapDecoder* decoder = nullptr;
-        IWICBitmapFrameDecode* frame = nullptr;
-        IWICFormatConverter* converter = nullptr;
-        IWICImagingFactory* wicFactory = nullptr;
-
-        
-
-        HRESULT hr = CoCreateInstance(
-            CLSID_WICImagingFactory,
-            nullptr,
-            CLSCTX_INPROC_SERVER,
-            IID_PPV_ARGS(&wicFactory)
-        );
-
-        if (!m_pRenderTarget)
-        {
-            RECT rc;
-            GetClientRect(m_hwnd, &rc);
-
-            D2D1_SIZE_U size = D2D1::SizeU(
-                rc.right - rc.left,
-                rc.bottom - rc.top
-            );
-
-            // Create a Direct2D render target.
-            hr = m_pDirect2dFactory->CreateHwndRenderTarget(
-                D2D1::RenderTargetProperties(),
-                D2D1::HwndRenderTargetProperties(m_hwnd, size),
-                &m_pRenderTarget
-            );
-        }
-
-        if (SUCCEEDED(hr))
-        {
-            hr = wicFactory->CreateDecoderFromFilename(
-                filePath.c_str(),
-                nullptr,
-                GENERIC_READ,
-                WICDecodeMetadataCacheOnLoad,
-                &decoder
-            );
-        }
-        else
-        {
-            printf("Shit Failed");
-            return nullptr;
-        }
-
-        if (SUCCEEDED(hr))
-        {
-            hr = decoder->GetFrame(0, &frame);
-        }
-        else
-        {
-            printf("Shit Failed");
-            return nullptr;
-        }
-
-        if (SUCCEEDED(hr))
-        {
-            hr = wicFactory->CreateFormatConverter(&converter);
-        }
-        else
-        {
-            printf("Shit Failed");
-            return nullptr;
-        }
-
-        if (SUCCEEDED(hr))
-        {
-            hr = converter->Initialize(
-                frame,
-                GUID_WICPixelFormat32bppPBGRA,
-                WICBitmapDitherTypeNone,
-                nullptr,
-                0.0,
-                WICBitmapPaletteTypeMedianCut
-            );
-        }
-
-
-        if (SUCCEEDED(hr))
-        {
-            hr = m_pRenderTarget->CreateBitmapFromWicBitmap(
-                converter,
-                nullptr,
-                &bitmap
-            );
-        }
-
-        SafeRelease(&wicFactory);
-        SafeRelease(&decoder);
-        SafeRelease(&frame);
-        SafeRelease(&converter);
-
-        return bitmap;
-
-    }
-
-
-
-
 
     HRESULT EngineApp::CreateDeviceIndependentResources()
     {
@@ -220,7 +105,7 @@ namespace Ferrus
     HRESULT EngineApp::Initialize()
     {
         HRESULT hr;
-        InitRegistry();
+        //InitRegistry();
 
         // Initialize device-indpendent resources, such
         // as the Direct2D factory.
@@ -358,35 +243,6 @@ namespace Ferrus
             //}
 
 
-            // Should clean this up and set a single reference to the registry at the least
-            for (const auto& pair : GetRegistry().GetSprites()) {
-                const EntityID entityID = pair.first;
-                const SpriteComponent& sprite = pair.second;
-
-                // This is currently assuming that there is a sprite component for every entityID should update to a for loop using NextEntityID or another value to note the number of entities
-                if (GetRegistry().GetTransforms().find(entityID) != GetRegistry().GetTransforms().end())
-                {
-                    const TransformComponent& transform = GetRegistry().GetTransformComponent(entityID);
-
-                    // Turns out only need one rotation float ( positive angle [in degrees] results in clockwise rotation)
-                    // Will need to add the central point for the sprite somehow as both the Rotation and Scale require it.  Currently using just the transformx/y value for testing
-                    D2D1_MATRIX_3X2_F transformationMatrix = D2D1::Matrix3x2F::Translation(transform.posX, transform.posY)
-                        * D2D1::Matrix3x2F::Rotation(transform.rotZ, D2D1::Point2F(transform.posX, transform.posY))
-                        * D2D1::Matrix3x2F::Scale(transform.scaleX, transform.scaleY, D2D1::Point2F(transform.posX, transform.posY));
-
-                    m_pRenderTarget->SetTransform(transformationMatrix);
-
-                }
-                // oops no transform component (set world transform to identity and draw)
-                else
-                {
-                    m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
-                }
-
-                // Actually Draw the bitmap here
-                m_pRenderTarget->DrawBitmap(sprite.pngBitmap, D2D1::RectF(0, 0, sprite.pngBitmap->GetSize().width, sprite.pngBitmap->GetSize().height));
-
-            }
 
 
 
@@ -418,11 +274,9 @@ namespace Ferrus
 
     LRESULT CALLBACK EngineApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
-        if (message == WM_DESTROY) { PostQuitMessage(0); return 0; }
+       
         
-        DefWindowProcW(hwnd, message, wParam, lParam);
-        
-        /*LRESULT result = 0;
+        LRESULT result = 0;
 
         if (message == WM_CREATE)
         {
@@ -494,6 +348,6 @@ namespace Ferrus
             }
         }
 
-        return result;*/
+        return result;
     }
 }

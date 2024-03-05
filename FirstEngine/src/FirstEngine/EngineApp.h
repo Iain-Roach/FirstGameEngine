@@ -23,11 +23,11 @@ namespace Ferrus {
 
 		void CreateRect(float left, float right, float top, float bottom);
 		
-		void InitRegistry();
+		//void InitRegistry();
 
-		Registry& GetRegistry();
-
-		ID2D1Bitmap* LoadBitmap(const std::wstring& filePath);
+		// Registry& GetRegistry();
+		 
+		// ID2D1Bitmap* LoadBitmap(const std::wstring& filePath);
 		
 		
 	private:
@@ -67,7 +67,7 @@ namespace Ferrus {
 		
 
 		std::vector<D2D1_RECT_F> rectangles;
-		Registry registry;
+		// Registry registry;
 
 	};
 

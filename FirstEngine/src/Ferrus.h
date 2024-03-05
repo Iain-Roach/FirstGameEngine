@@ -3,6 +3,7 @@
 #include "FirstEngine/EngineApp.h"
 #include "FirstEngine/Component.h"
 #include "FirstEngine/Registry.h"
+#include "FirstEngine/Graphics.h"
 #include <stdio.h>
 #include <vector>
 #include <unordered_map>

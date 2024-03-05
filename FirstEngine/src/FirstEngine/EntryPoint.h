@@ -7,6 +7,8 @@
 
 extern Ferrus::EngineApp* Ferrus::CreateApplication();
 
+Graphics* graphics;
+
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -39,13 +41,14 @@ int WINAPI wWinMain(
     HWND windowHandle = CreateWindowExW(WS_EX_OVERLAPPEDWINDOW ,L"MainWindow", L"Direct2D Engine", WS_OVERLAPPEDWINDOW, 100, 100, clientArea.right - clientArea.left, clientArea.bottom - clientArea.top, NULL, NULL, hInstance, 0); 
 
     if (!windowHandle) return -1;
-
-    /*graphics = new Ferrus::Graphics();
+    
+    
+    graphics = new Graphics();
     if (!graphics->Init(windowHandle))
     {
         delete graphics;
         return -1;
-    }*/
+    }
     
 
     ShowWindow(windowHandle, nCmdShow);

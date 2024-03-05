@@ -1,7 +1,7 @@
 #include "Graphics.h"
-#include "EngineCore.h"
 
-namespace Ferrus {
+
+
 	Graphics::Graphics()
 	{
 		factory = NULL;
@@ -28,7 +28,7 @@ namespace Ferrus {
 
 		return true;
 	}
-}
+
 
 
 
