@@ -1,13 +1,13 @@
 #pragma once
 #include "Graphics.h"
 
-
+// Need to move everything into EngineApp hopefully that will fix the issue with Grpahics not being linked properly Cope
 
 #ifdef FE_PLATFORM_WINDOWS
 
 extern Ferrus::EngineApp* Ferrus::CreateApplication();
 
-Graphics* graphics;
+//Graphics* graphics;
 
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -42,13 +42,13 @@ int WINAPI wWinMain(
 
     if (!windowHandle) return -1;
     
-    
+    /*
     graphics = new Graphics();
     if (!graphics->Init(windowHandle))
     {
         delete graphics;
         return -1;
-    }
+    }*/
     
 
     ShowWindow(windowHandle, nCmdShow);
