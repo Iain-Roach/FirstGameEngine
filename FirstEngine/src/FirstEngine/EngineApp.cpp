@@ -5,349 +5,128 @@
 
 namespace Ferrus
 {
-    EngineApp::EngineApp() : m_hwnd(NULL), m_pDirect2dFactory(NULL), m_pRenderTarget(NULL), m_pLightSlateGrayBrush(NULL), m_pCornflowerBlueBrush(NULL), rectangles{}
+    EngineApp::EngineApp() :  hwnd(NULL)
     {
+        
     }
+
     EngineApp::~EngineApp()
     {
-        SafeRelease(&m_pDirect2dFactory);
-        SafeRelease(&m_pRenderTarget);
-        SafeRelease(&m_pLightSlateGrayBrush);
-        SafeRelease(&m_pCornflowerBlueBrush);
+        /*if (graphics) { delete graphics; graphics = nullptr; }*/
+
     }
 
-    void EngineApp::RunMessageLoop()
+    HRESULT EngineApp::Run(HINSTANCE hInstance, int nCmdShow)
     {
-        MSG msg;
-
-        while (GetMessage(&msg, NULL, 0, 0))
+        if (FAILED(Initialize(hInstance, nCmdShow)))
         {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
-
-    // Maybe use dictionary to split between if you want the rectangle to be filled or not using keys?
-    void EngineApp::CreateRect(float left, float right, float top, float bottom)
-    {
-
-        D2D1_RECT_F rect = D2D1::RectF(
-            left,
-            top,
-            right,
-            bottom
-        );
-
-        rectangles.push_back(rect);
-
-    }
-
-
-    HRESULT EngineApp::CreateDeviceIndependentResources()
-    {
-        HRESULT hr = S_OK;
-
-        // Create a Direct2D factory.
-        hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_pDirect2dFactory);
-
-        return hr;
-    }
-
-    HRESULT EngineApp::CreateDeviceResources()
-    {
-        HRESULT hr = S_OK;
-
-        if (!m_pRenderTarget)
-        {
-            RECT rc;
-            GetClientRect(m_hwnd, &rc);
-
-            D2D1_SIZE_U size = D2D1::SizeU(
-                rc.right - rc.left,
-                rc.bottom - rc.top
-            );
-
-            // Create a Direct2D render target.
-            hr = m_pDirect2dFactory->CreateHwndRenderTarget(
-                D2D1::RenderTargetProperties(),
-                D2D1::HwndRenderTargetProperties(m_hwnd, size),
-                &m_pRenderTarget
-            );
-
-            if (SUCCEEDED(hr))
-            {
-                // Create a gray brush.
-                hr = m_pRenderTarget->CreateSolidColorBrush(
-                    D2D1::ColorF(D2D1::ColorF::LightSlateGray),
-                    &m_pLightSlateGrayBrush
-                );
-            }
-            if (SUCCEEDED(hr))
-            {
-                // Create a blue brush.
-                hr = m_pRenderTarget->CreateSolidColorBrush(
-                    D2D1::ColorF(D2D1::ColorF::CornflowerBlue),
-                    &m_pCornflowerBlueBrush
-                );
-            }
+            return -1; // Initialize failed
         }
 
-        return hr;
+        MessageLoop();
+
+        delete graphics;
+
+        return 0;
     }
 
-    void EngineApp::DiscardDeviceResources()
+    void EngineApp::MessageLoop()
     {
-        SafeRelease(&m_pRenderTarget);
-        SafeRelease(&m_pLightSlateGrayBrush);
-        SafeRelease(&m_pCornflowerBlueBrush);
-    }
-
-    HRESULT EngineApp::Initialize()
-    {
-        HRESULT hr;
-        //InitRegistry();
-
-        // Initialize device-indpendent resources, such
-        // as the Direct2D factory.
-        hr = CreateDeviceIndependentResources();
-
-        if (SUCCEEDED(hr))
+        // Message Loop
+        MSG message;
+        while (GetMessage(&message, NULL, 0, 0))
         {
-            // Register the window class.
-            WNDCLASSEX wcex = { sizeof(WNDCLASSEX) };
-            wcex.style = CS_HREDRAW | CS_VREDRAW;
-            wcex.lpfnWndProc = EngineApp::WndProc;
-            wcex.cbClsExtra = 0;
-            wcex.cbWndExtra = sizeof(LONG_PTR);
-            wcex.hInstance = HINST_THISCOMPONENT;
-            wcex.hbrBackground = NULL;
-            wcex.lpszMenuName = NULL;
-            wcex.hCursor = LoadCursor(NULL, IDI_APPLICATION);
-            wcex.lpszClassName = L"D2DDemoApp";
-
-            RegisterClassEx(&wcex);
-
-            // In terms of using the correct DPI, to create a window at a specific size
-            // like this, the procedure is to first create the window hidden. Then we get
-            // the actual DPI from the HWND (which will be assigned by whichever monitor
-            // the window is created on). Then we use SetWindowPos to resize it to the
-            // correct DPI-scaled size, then we use ShowWindow to show it.
-
-
-            m_hwnd = CreateWindow(
-                L"D2DDemoApp",
-                L"Direct2D demo application",
-                WS_OVERLAPPEDWINDOW,
-                CW_USEDEFAULT,
-                CW_USEDEFAULT,
-                0,
-                0,
-                NULL,
-                NULL,
-                HINST_THISCOMPONENT,
-                this);
-
-            if (m_hwnd)
-            {
-                // Because the SetWindowPos function takes its size in pixels, we
-                // obtain the window's DPI, and use it to scale the window size.
-                float dpi = GetDpiForWindow(m_hwnd);
-
-                SetWindowPos(
-                    m_hwnd,
-                    NULL,
-                    NULL,
-                    NULL,
-                    static_cast<int>(ceil(640.f * dpi / 96.f)),
-                    static_cast<int>(ceil(480.f * dpi / 96.f)),
-                    SWP_NOMOVE);
-                ShowWindow(m_hwnd, SW_SHOWNORMAL);
-                UpdateWindow(m_hwnd);
-            }
+            TranslateMessage(&message);
+            DispatchMessage(&message);
         }
 
-        return hr;
+        delete graphics;
     }
 
-    void EngineApp::Run()
-    {
-        while (true);
-    }
+    HRESULT EngineApp::Initialize(HINSTANCE hInstance, int nCmdShow)
+	{
+        // Can move this stuff to EngineApp using method commented below ( used to be in engineapp.initialize())
+        WNDCLASSEX windowClass;
+        ZeroMemory(&windowClass, sizeof(WNDCLASSEX));
+        windowClass.cbSize = sizeof(WNDCLASSEX);
+        windowClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
+        windowClass.hInstance = hInstance;
+        windowClass.lpfnWndProc = WndProc;
+        windowClass.lpszClassName = L"MainWindow"; // making the LPWSTR into LPCWSTR and then back fixed error???
+        windowClass.style = CS_HREDRAW | CS_VREDRAW; // redraw when resized vertically / horizontally
 
-    
+        RegisterClassExW(&windowClass);
 
-    HRESULT EngineApp::OnRender()
-    {
-        HRESULT hr = S_OK;
 
-        hr = CreateDeviceResources();
+        RECT clientArea = { 0, 0, 800, 600 };
+        AdjustWindowRectEx(&clientArea, WS_OVERLAPPEDWINDOW, false, WS_EX_OVERLAPPEDWINDOW); // Calculating the width and height so the client area is accurate
+        HWND windowHandle = CreateWindowExW(WS_EX_OVERLAPPEDWINDOW, L"MainWindow", L"Direct2D Engine", WS_OVERLAPPEDWINDOW, 100, 100, clientArea.right - clientArea.left, clientArea.bottom - clientArea.top, NULL, NULL, hInstance, 0);
 
-        if (SUCCEEDED(hr))
+
+        if (!windowHandle) return -1;
+
+        graphics = new Graphics();
+
+        if (!graphics->Init(windowHandle))
         {
-            m_pRenderTarget->BeginDraw();
-            m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
-            m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
-
-
-            D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
-
-            // Draw a grid background.
-            int width = static_cast<int>(rtSize.width);
-            int height = static_cast<int>(rtSize.height);
-
-            for (int x = 0; x < width; x += 10)
-            {
-                m_pRenderTarget->DrawLine(
-                    D2D1::Point2F(static_cast<FLOAT>(x), 0.0f),
-                    D2D1::Point2F(static_cast<FLOAT>(x), rtSize.height),
-                    m_pLightSlateGrayBrush,
-                    0.5f
-                );
-            }
-
-            for (int y = 0; y < height; y += 10)
-            {
-                m_pRenderTarget->DrawLine(
-                    D2D1::Point2F(0.0f, static_cast<FLOAT>(y)),
-                    D2D1::Point2F(rtSize.width, static_cast<FLOAT>(y)),
-                    m_pLightSlateGrayBrush,
-                    0.5f
-                );
-            }
-
-            // Draw two rectangles.
-            D2D1_RECT_F rectangle1 = D2D1::RectF(
-                rtSize.width / 2 - 50.0f,
-                rtSize.height / 2 - 50.0f,
-                rtSize.width / 2 + 50.0f,
-                rtSize.height / 2 + 50.0f
-            );
-
-            D2D1_RECT_F rectangle2 = D2D1::RectF(
-                rtSize.width / 2 - 100.0f,
-                rtSize.height / 2 - 100.0f,
-                rtSize.width / 2 + 100.0f,
-                rtSize.height / 2 + 100.0f
-            );
-
-            //========================================== DRAW THINGS HERE =================================================
-
-            //for (int i = 0; i < rectangles.size(); i++)
-            //{
-            //    if (i == 0)
-            //    {
-            //        // Draw a filled rectangle.
-            //        /*m_pRenderTarget->FillRectangle(&rectangle1, m_pLightSlateGrayBrush);*/
-            //    }
-            //    m_pRenderTarget->FillRectangle(&rectangles[i], m_pCornflowerBlueBrush);
-            //}
-
-
-
-
-
-            // Draw the outline of a rectangle.
-            m_pRenderTarget->DrawRectangle(&rectangle2, m_pCornflowerBlueBrush);
-
-            hr = m_pRenderTarget->EndDraw();
+            delete graphics;
+            return -1;
         }
 
-        if (hr == D2DERR_RECREATE_TARGET)
-        {
-            hr = S_OK;
-            DiscardDeviceResources();
-        }
+        ShowWindow(windowHandle, nCmdShow);
 
-        return hr;
-    }
-
-    void EngineApp::OnResize(UINT width, UINT height)
-    {
-        if (m_pRenderTarget)
-        {
-            // Note: This method can fail, but it's okay to ignore the
-            // error here, because the error will be returned again
-            // the next time EndDraw is called.
-            m_pRenderTarget->Resize(D2D1::SizeU(width, height));
-        }
-    }
-
-    LRESULT CALLBACK EngineApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-    {
        
-        
-        LRESULT result = 0;
 
-        if (message == WM_CREATE)
-        {
-            LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;
-            EngineApp* pEngineApp = (EngineApp*)pcs->lpCreateParams;
+        //MSG message; // MessageLoop
+        //while (GetMessage(&message, NULL, 0, 0)) // NULL means get message from this threads window?
+        //{
+        //    DispatchMessage(&message); // allows window to dispatch the message from interactions  to the WindowProc callback
+        //}
 
-            ::SetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA,
-                reinterpret_cast<LONG_PTR>(pEngineApp)
-            );
+        //delete graphics;
+	}
 
-            result = 1;
-        }
-        else
-        {
-            EngineApp* pEngineApp = reinterpret_cast<EngineApp*>(static_cast<LONG_PTR>(
-                ::GetWindowLongPtrW(
-                    hwnd,
-                    GWLP_USERDATA
-                )));
-
-            bool wasHandled = false;
-
-            if (pEngineApp)
-            {
-                switch (message)
-                {
-                case WM_SIZE:
-                {
-                    UINT width = LOWORD(lParam);
-                    UINT height = HIWORD(lParam);
-                    pEngineApp->OnResize(width, height);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
-
-                case WM_DISPLAYCHANGE:
-                {
-                    InvalidateRect(hwnd, NULL, FALSE);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
-
-                case WM_PAINT:
-                {
-                    pEngineApp->OnRender();
-                    ValidateRect(hwnd, NULL);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
-
-                case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
-                }
-            }
-
-            if (!wasHandled)
-            {
-                result = DefWindowProc(hwnd, message, wParam, lParam);
-            }
+    // Will update graphics->Init to HRESULT
+    HRESULT EngineApp::initGraphics(HWND hwnd)
+    {
+        graphics = new Graphics();
+        if (!graphics) {
+            return E_FAIL; // failed to allocate memory
         }
 
-        return result;
+        HRESULT hr = graphics->Init(hwnd);
+        if (FAILED(hr))
+        {
+            delete graphics;
+            graphics = nullptr;
+            return hr;
+        }
+
+        return S_OK;
+
     }
+    LRESULT EngineApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+	{
+		if (message == WM_DESTROY) { PostQuitMessage(0); return 0; }
+
+        // Window Needs to Repaint Itself
+        if (message == WM_PAINT)
+        {
+            graphics->BeginDraw();
+
+            graphics->ClearScreen(0.3f, 0.3f, 0.6f);
+
+            for (int i = 0; i < 1000; i++)
+            {
+                graphics->DrawCircle(rand()%800, rand()%600, rand()%100, (rand()%100) / 100.0f, (rand() % 100) / 100.0f, (rand() % 100) / 100.0f, (rand() % 100) / 100.0f);
+            }
+            
+
+            graphics->EndDraw();
+        }
+
+
+
+		return DefWindowProcW(hwnd, message, wParam, lParam);
+	}
 }
