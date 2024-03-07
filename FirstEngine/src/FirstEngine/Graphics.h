@@ -17,6 +17,7 @@
 		void ClearScreen(float r, float g, float b);
 		void DrawCircle(float x, float y, float radius, float r, float g, float b, float a);
 
+		ID2D1RenderTarget* getRenderTarget() { return renderTarget; }
 	private:
 		ID2D1Factory* factory;
 		ID2D1HwndRenderTarget* renderTarget;

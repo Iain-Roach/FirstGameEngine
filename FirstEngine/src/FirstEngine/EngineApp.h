@@ -5,6 +5,7 @@
 #include <wrl/client.h>
 #include <memory>
 #include "Graphics.h"
+#include "Sprite.h"
 
 
 namespace Ferrus {
@@ -15,6 +16,9 @@ namespace Ferrus {
 		EngineApp();
 		~EngineApp();
 		HRESULT Run(HINSTANCE hInstance, int nCmdShow);
+
+		void Update();
+		void OnRender();
 		void MessageLoop();
 
 		// Register the window class
@@ -35,6 +39,12 @@ namespace Ferrus {
 		HWND hwnd;
 		
 
+		// Test vars for bouncing ball
+		float ySpeed = 0.0f;
+		float yPos = 0.0f;
+		
+		Sprite* sprite;
+		
 	};
 
 	Graphics* graphics;
