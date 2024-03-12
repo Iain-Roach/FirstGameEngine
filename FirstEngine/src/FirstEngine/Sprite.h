@@ -9,7 +9,7 @@
 		Sprite(PCWSTR filePath, Graphics* gfx);
 		~Sprite();
 
-		void Draw();
+		void Draw(float x, float y);
 
 
 	private:

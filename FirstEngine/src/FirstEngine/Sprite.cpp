@@ -135,12 +135,14 @@
 		if (bmp) bmp->Release();
 	}
 
-	void Sprite::Draw()
+	void Sprite::Draw(float x, float y)
 	{
 		gfx->getRenderTarget()->DrawBitmap(
 			bmp,												// Bitmap
-			D2D1::RectF(-32.0f, 0.0f, 								// Destination rectangle (where on rendertarget to draw)
-				bmp->GetSize().width * 4 - 32.0f, bmp->GetSize().height * 4),
+			D2D1::RectF((x - 16.0f),									// Destination rectangle (where on rendertarget to draw)
+				(y - 16.0f),
+				((bmp->GetSize().width) + x - 16.0f),
+				(bmp->GetSize().height) + y - 16.0f),
 			1.0f,												// Opacity
 			D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR,	// If bitmap is streched or shrunk
 			D2D1::RectF(0.0f, 0.0f,								// source rectangle

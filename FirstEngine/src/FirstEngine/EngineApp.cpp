@@ -57,8 +57,36 @@ namespace Ferrus
         RECT clientRect;
         GetClientRect(hwnd, &clientRect);
         graphics->DrawCircle(375.0f, yPos, 50.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+        // rotates clockwise 20 degrees.
+        graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Rotation(90, D2D1::Point2F(50, 50)));                      // For rotations we would have to rotate the render target before and after each draw. would use the transform component for center position of rotation
+        // test circle to get location on rendertarget
+        graphics->DrawCircle(50, 50, 5, 1.0f, 0.0f, 0.0f, 1.0f);
 
-        sprite->Draw();
+        // Scaling sprite still needs the center of the sprite
+        graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Scale(4.0f, 4.0f, D2D1::Point2F(50, 50)));
+
+        sprite->Draw(50.0f, 50); // We can pass the transform from the transform component as a value when drawing the sprite component.
+        graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        // im thinking: when drawing sprites to screen. 
+        // 1st create loop that will loop threw all the existing spritecomponenets
+        // 2nd create variable of the center of the sprite
+        // 3rd rotate rendertarget
+        // 4th scale rendertarget
+        // 5th draw sprite at specific position
+        // 6th reset rendertarget
+        // loop until no more sprites need to be drawn.
+
+
+
+
+
+
+
+
+
+
+
 
         graphics->EndDraw();
     }

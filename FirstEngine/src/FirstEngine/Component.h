@@ -25,3 +25,13 @@
 //	float scaleX = 1;
 //	float scaleY = 1;
 //};
+
+#pragma once
+
+// first = x, second = y
+struct Transform
+{
+	std::pair<float, float> pos;
+	float rotation;
+	std::pair<float, float> scale;
+};
