@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClInclude Include="src\FirstEngine\ComponentArray.h" />
     <ClInclude Include="src\FirstEngine\ComponentManager.h" />
+    <ClInclude Include="src\FirstEngine\Coordinator.h" />
     <ClInclude Include="src\FirstEngine\Sprite.h" />
     <ClInclude Include="src\FirstEngine\Graphics.h" />
     <ClInclude Include="src\FirstEngine\Component.h" />
@@ -102,6 +103,8 @@
     <ClInclude Include="src\FirstEngine\EngineApp.h" />
     <ClInclude Include="src\FirstEngine\EngineCore.h" />
     <ClInclude Include="src\FirstEngine\EntryPoint.h" />
+    <ClInclude Include="src\FirstEngine\System.h" />
+    <ClInclude Include="src\FirstEngine\SystemManager.h" />
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
