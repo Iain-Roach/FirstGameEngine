@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <filesystem>
+#include "Coordinator.h"
 
 namespace Ferrus
 {

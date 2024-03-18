@@ -43,10 +43,11 @@ namespace Ferrus {
 		float ySpeed = 0.0f;
 		float yPos = 0.0f;
 		
+		
 		Sprite* sprite;
 		Graphics* graphics;
 	};
-
+	Coordinator coordinator;
 	
 	// Create App here
 	EngineApp* CreateApplication();

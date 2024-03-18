@@ -24,7 +24,7 @@ namespace Ferrus
 
 			size_t newIndex = size;
 			entityToIndexMap[entity] = newIndex;
-			indexToentityMap[newIndex] = entity;
+			indexToEntityMap[newIndex] = entity;
 			componentArray[newIndex] = component;
 			size++;
 		}
@@ -39,7 +39,7 @@ namespace Ferrus
 
 			EntityID entityOfLastElement = indexToEntityMap[indexOfLastElement];
 			entityToIndexMap[entityOfLastElement] = indexOfRemovedEntity;
-			indexToEntityMap[indexOfRemovedentity] = entityOfLastElement;
+			indexToEntityMap[indexOfRemovedEntity] = entityOfLastElement;
 
 			entityToIndexMap.erase(entity);
 			indexToEntityMap.erase(indexOfLastElement);
@@ -54,7 +54,7 @@ namespace Ferrus
 			return componentArray[entityToIndexMap[entity]];
 		}
 
-		void EntityDestroyed(EnityID entity) override
+		void EntityDestroyed(EntityID entity) override
 		{
 			if (entityToIndexMap.find(entity) != entityToIndexMap.end())
 			{
@@ -66,7 +66,7 @@ namespace Ferrus
 	private:
 		std::array<T, MAX_ENTITIES> componentArray;
 		std::unordered_map<EntityID, size_t> entityToIndexMap;
-		std::unordered_map<size_t, EnityID> indexToEntityMap;
+		std::unordered_map<size_t, size_t> indexToEntityMap;
 
 		size_t size;
 
