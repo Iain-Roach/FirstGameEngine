@@ -42,19 +42,10 @@
     <ClInclude Include="src\FirstEngine\Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FirstEngine\ComponentArray.h">
+    <ClInclude Include="ExternalHeaders\entt.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FirstEngine\ComponentManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FirstEngine\System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FirstEngine\SystemManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FirstEngine\Coordinator.h">
+    <ClInclude Include="src\FirstEngine\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -72,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FirstEngine\Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FirstEngine\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

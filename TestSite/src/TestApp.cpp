@@ -20,7 +20,7 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 {
 	Ferrus::EngineApp* app = new Ferrus::EngineApp;
 
-
+	
 
 	// Currently error watch D2D tutorial : https://www.youtube.com/watch?v=RKZvT4U71rg might restructure EngineApp entirely to implement working sprites lsdkfjs
 

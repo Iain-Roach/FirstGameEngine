@@ -7,7 +7,6 @@
 #include "Graphics.h"
 #include "Sprite.h"
 
-
 namespace Ferrus {
 
 	class FERRUS_API EngineApp
@@ -47,7 +46,6 @@ namespace Ferrus {
 		Sprite* sprite;
 		Graphics* graphics;
 	};
-	Coordinator coordinator;
 	
 	// Create App here
 	EngineApp* CreateApplication();

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <filesystem>
-#include "Coordinator.h"
+
 
 namespace Ferrus
 {
@@ -173,6 +173,7 @@ namespace Ferrus
         //}
 
         //delete graphics;
+        return S_OK;
 	}
 
     // Will update graphics->Init to HRESULT

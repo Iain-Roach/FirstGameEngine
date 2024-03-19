@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <vector>
 #include <unordered_map>
+#include "../ExternalHeaders/entt.hpp"
 
 // Windows header files:
 #include <Windows.h>
