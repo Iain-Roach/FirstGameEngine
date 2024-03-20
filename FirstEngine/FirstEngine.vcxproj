@@ -93,6 +93,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ExternalHeaders\entt.hpp" />
+    <ClInclude Include="src\FirstEngine\Input.h" />
     <ClInclude Include="src\FirstEngine\FileLoader.h" />
     <ClInclude Include="src\FirstEngine\Scene.h" />
     <ClInclude Include="src\FirstEngine\Sprite.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FirstEngine\Input.cpp" />
     <ClCompile Include="src\FirstEngine\FileLoader.cpp" />
     <ClCompile Include="src\FirstEngine\Scene.cpp" />
     <ClCompile Include="src\FirstEngine\Sprite.cpp" />

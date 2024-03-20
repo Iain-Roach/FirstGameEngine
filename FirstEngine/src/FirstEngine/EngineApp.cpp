@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <filesystem>
-
+#include "Input.h"
 
 namespace Ferrus
 {
@@ -17,6 +17,7 @@ namespace Ferrus
     EngineApp::~EngineApp()
     {
         if (sprite) delete sprite;
+        delete& Input::GetInstance();
 
     }
 
@@ -50,6 +51,13 @@ namespace Ferrus
 
         }
 
+        Input& input = Input::GetInstance();
+
+        float speed = 1.0f;
+        
+
+
+
         auto view = registry.view<TransformComponent, SpriteComponent>();
         for (entt::entity entity : view)
         {
@@ -57,7 +65,20 @@ namespace Ferrus
             {
                 auto& transform = view.get<TransformComponent>(entity);
                 
-                transform.Pos.x += sinf(t / 100);
+                if (input.KeyDown('W')) { transform.Pos.y += -speed; }
+                if (input.KeyDown('S')) { transform.Pos.y += speed; }
+                if (input.KeyDown('A')) { transform.Pos.x += -speed; }
+                if (input.KeyDown('D')) { transform.Pos.x += speed; }
+
+
+
+
+
+
+
+
+
+                //transform.Pos.x += sinf(t / 100);
             }
             auto& sprite = view.get<SpriteComponent>(entity);
         }
@@ -162,15 +183,23 @@ namespace Ferrus
         {
             if (PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
             {
+                TranslateMessage(&message);
                 DispatchMessage(&message); // sends message to WndPrc
             }
             else
             {
+                Input::GetInstance().Update();
+
+
                 // Update
                 Update();
 
                 // Render
                 OnRender();
+
+
+
+                Input::GetInstance().EndOfFrame();
             }
         }
         
@@ -221,6 +250,11 @@ namespace Ferrus
         }
 
         ShowWindow(windowHandle, nCmdShow);
+
+        Input::GetInstance().Initialize(windowHandle);
+
+
+
 
         std::filesystem::path currentPath = std::filesystem::current_path();
         std::stringstream stream;
@@ -281,7 +315,15 @@ namespace Ferrus
 	{
 		if (message == WM_DESTROY) { PostQuitMessage(0); return 0; }
 
-
+        switch (message)
+        {
+        case WM_MOUSEWHEEL:
+            Input::GetInstance().SetWheelDelta(GET_WHEEL_DELTA_WPARAM(wParam) / (float)WHEEL_DELTA);
+            return 0;
+        case WM_INPUT:
+            Input::GetInstance().ProcessRawMouseInput(lParam);
+            break;
+        }
 
 
 		return DefWindowProcW(hwnd, message, wParam, lParam);
