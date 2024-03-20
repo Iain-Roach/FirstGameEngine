@@ -130,6 +130,12 @@
 		//if (wicDecoder) wicDecoder->Release();
 	}
 
+	Sprite::Sprite(ID2D1Bitmap* bmp, Graphics* gfx)
+	{
+		this->bmp = bmp;
+		this->gfx = gfx;
+	}
+
 	Sprite::~Sprite()
 	{
 		if (bmp) bmp->Release();

@@ -39,6 +39,7 @@ namespace Ferrus
         ySpeed += 1.0f;
         yPos += ySpeed;
 
+        t++;
         RECT clientRect;
         GetClientRect(hwnd, &clientRect);
         // GetClientRect not working?
@@ -48,6 +49,19 @@ namespace Ferrus
             ySpeed = -30.0f;
 
         }
+
+        auto view = registry.view<TransformComponent, SpriteComponent>();
+        for (entt::entity entity : view)
+        {
+            if (entity == entt::entity(0))
+            {
+                auto& transform = view.get<TransformComponent>(entity);
+                
+                transform.Pos.x += sinf(t / 100);
+            }
+            auto& sprite = view.get<SpriteComponent>(entity);
+        }
+
     }
 
     void EngineApp::OnRender()
@@ -69,6 +83,44 @@ namespace Ferrus
         sprite->Draw(50.0f, 50); // We can pass the transform from the transform component as a value when drawing the sprite component.
         graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
 
+        
+
+        auto spriteView = registry.view<TransformComponent, SpriteComponent>();
+        for (auto entity : spriteView)
+        {
+            auto& transformComp = spriteView.get<TransformComponent>(entity);
+            auto& spriteComp = spriteView.get<SpriteComponent>(entity);
+
+            /*graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Rotation(20, D2D1::Point2F(transformComp.Pos.x, transformComp.Pos.y)));
+            graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Scale(4.0f, 4.0f, D2D1::Point2F(transformComp.Pos.x, transformComp.Pos.y)));*/
+            // Create a combined transformation matrix for rotation and scale
+            D2D1_MATRIX_3X2_F combinedTransform = D2D1::Matrix3x2F::Rotation(transformComp.Rot, D2D1::Point2F(transformComp.Pos.x, transformComp.Pos.y))
+                * D2D1::Matrix3x2F::Scale(transformComp.Scale.x, transformComp.Scale.y, D2D1::Point2F(transformComp.Pos.x, transformComp.Pos.y));
+
+            // Set the combined transformation matrix
+            graphics->getRenderTarget()->SetTransform(combinedTransform);
+
+            sprite = new Sprite(spriteComp.FilePath, graphics);
+            sprite->Draw(transformComp.Pos.x, transformComp.Pos.y);
+
+            graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+
+            //graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+
+            //Sprite drawSprite = Sprite(spriteComp.BitMap, graphics);
+
+            //drawSprite.Draw(transformComp.Pos.x, transformComp.Pos.y);
+           // graphics->getRenderTarget()->DrawBitmap(
+           //     spriteComp.BitMap,
+           //     D2D1::RectF((transformComp.Pos.x - 16.0f), (transformComp.Pos.y - 16.0f), spriteComp.BitMap->GetSize().width + transformComp.Pos.x - 16.0f, spriteComp.BitMap->GetSize().height + transformComp.Pos.y - 16.0f),
+           //     1.0f,
+           //     D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR,
+           //     D2D1::RectF(0.0f, 0.0f, spriteComp.BitMap->GetSize().width, spriteComp.BitMap->GetSize().height));
+
+        }
+
+
+
         // im thinking: when drawing sprites to screen. 
         // 1st create loop that will loop threw all the existing spritecomponenets
         // 2nd create variable of the center of the sprite
@@ -78,15 +130,24 @@ namespace Ferrus
         // 6th reset rendertarget
         // loop until no more sprites need to be drawn.
 
+        
+
+        // Testing transform component:
+        auto view = registry.view<TransformComponent>();
+        for (auto entity : view)
+        {
+            auto& transformComp = view.get<TransformComponent>(entity);
+
+
+
+            graphics->DrawCircle(transformComp.Pos.x, transformComp.Pos.y, 10.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+        }
 
 
 
 
 
-
-
-
-
+        
 
 
         graphics->EndDraw();
@@ -115,6 +176,18 @@ namespace Ferrus
         
 
         delete graphics;
+    }
+
+    HRESULT EngineApp::initFileLoader(Graphics* gfx)
+    {
+        FileLoader fl = FileLoader(gfx);
+        fileLoader = &fl;
+        return S_OK;
+    }
+
+    FileLoader* EngineApp::GetFileLoader()
+    {
+        return fileLoader;
     }
 
     HRESULT EngineApp::Initialize(HINSTANCE hInstance, int nCmdShow)
@@ -165,14 +238,23 @@ namespace Ferrus
             OutputDebugStringA(ss.str().c_str());
         }
         
+        // Registry Testing Zone
+        entt::entity testEntity = registry.create();
+        auto& transformTest = registry.emplace<TransformComponent>(testEntity, D2D1::Point2F(200.0f, 400.0f), 0.0f, D2D1::Point2F(1.0f, 1.0f));
+        entt::entity anotherEntity = registry.create();
+        registry.emplace<TransformComponent>(anotherEntity, D2D1::Point2F(600.0f, 400.0f), 0.0f, D2D1::Point2F(1.0f, 1.0f));
 
-        //MSG message; // MessageLoop
-        //while (GetMessage(&message, NULL, 0, 0)) // NULL means get message from this threads window?
-        //{
-        //    DispatchMessage(&message); // allows window to dispatch the message from interactions  to the WindowProc callback
-        //}
+        initFileLoader(graphics);
 
-        //delete graphics;
+        // Load Files >:(
+        /*auto view = registry.view<SpriteComponent>();
+        for (auto entity : view)
+        {
+            auto& spriteComp = view.get<SpriteComponent>(entity);
+            Sprite testBitmap = Sprite(spriteComp.FilePath, graphics);
+            spriteComp.BitMap = testBitmap.GetBitMap();
+        }*/
+
         return S_OK;
 	}
 

@@ -6,7 +6,9 @@
 #include <memory>
 #include "Graphics.h"
 #include "Sprite.h"
-
+#include "../../ExternalHeaders/entt.hpp"
+#include "Component.h"
+#include "FileLoader.h"
 namespace Ferrus {
 
 	class FERRUS_API EngineApp
@@ -20,10 +22,16 @@ namespace Ferrus {
 		void OnRender();
 		void MessageLoop();
 
+		HRESULT initFileLoader(Graphics* gfx);
+		FileLoader* GetFileLoader();
+		entt::registry& GetRegistry() { return registry; }
+
 		// Register the window class
 		HRESULT Initialize(HINSTANCE hInstance, int nCmdShow);
 		
 		
+		
+
 	private:
 		HRESULT initGraphics(HWND hwnd);
 
@@ -36,15 +44,16 @@ namespace Ferrus {
 		);
 
 		HWND hwnd;
-		
+		float t = 0.0f;
 
 		// Test vars for bouncing ball
 		float ySpeed = 0.0f;
 		float yPos = 0.0f;
 		
-		
+		FileLoader* fileLoader;
 		Sprite* sprite;
 		Graphics* graphics;
+		entt::registry registry;
 	};
 	
 	// Create App here

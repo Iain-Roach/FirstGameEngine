@@ -4,6 +4,7 @@ Ferrus::Scene::Scene()
 {
 	struct SpriteComponent
 	{
+		float value;
 		SpriteComponent() = default;
 		SpriteComponent(const SpriteComponent&) = default;
 	};
@@ -37,10 +38,11 @@ Ferrus::Scene::Scene()
 	auto view = registry.view<TransformComponent, SpriteComponent>();
 	for (auto entity : view)
 	{
-		//auto& tran = view.get<TransformComponent>(entity);
-		//auto& sprite = view.get<SpriteComponent>(entity);
+		auto& tran = view.get<TransformComponent>(entity);
+		auto& sprite = view.get<SpriteComponent>(entity);
 
 		// auto [tran, sprite] = view.get<TransformComponent, SpriteComponent>(entity);
+		
 	}
 
 	auto group = registry.group<TransformComponent, SpriteComponent>();

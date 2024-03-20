@@ -29,9 +29,21 @@
 #pragma once
 
 // first = x, second = y
-struct Transform
+struct TransformComponent
 {
-	std::pair<float, float> pos;
-	float rotation;
-	std::pair<float, float> scale;
+	D2D_POINT_2F Pos;
+	float Rot;
+	D2D_POINT_2F Scale;
+
+	TransformComponent() = default;
+	TransformComponent(const TransformComponent&) = default;
+	TransformComponent(const D2D_POINT_2F& pos, const float& rot, const D2D_POINT_2F& scale) : Pos(pos), Rot(rot), Scale(scale) {}
+};
+
+struct SpriteComponent {
+	ID2D1Bitmap* BitMap;
+	PCWSTR FilePath;
+	SpriteComponent() = default;
+	SpriteComponent(const SpriteComponent&) = default;
+	SpriteComponent(PCWSTR filePath) : FilePath(filePath), BitMap(NULL) {}
 };

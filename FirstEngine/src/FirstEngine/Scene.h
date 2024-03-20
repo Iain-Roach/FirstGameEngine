@@ -1,9 +1,13 @@
 #pragma once
-
+#include "EngineCore.h"
 #include <d2d1.h>
 #include "../../ExternalHeaders/entt.hpp"
+
+// Allow client to create entities to a registry
+
+
 namespace Ferrus {
-	class Scene
+	class FERRUS_API Scene
 	{
 	public:
 		Scene();
