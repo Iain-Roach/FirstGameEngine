@@ -47,3 +47,22 @@ struct SpriteComponent {
 	SpriteComponent(const SpriteComponent&) = default;
 	SpriteComponent(PCWSTR filePath) : FilePath(filePath), BitMap(NULL) {}
 };
+
+struct CollisionComponent {
+	float Radius;
+	bool IsColliding;
+
+	CollisionComponent() = default;
+	CollisionComponent(const CollisionComponent&) = default;
+	CollisionComponent(float radius, bool isColliding) : Radius(radius), IsColliding(isColliding) {}
+
+	bool checkCollision(D2D1_POINT_2F obj1, float radius1, D2D1_POINT_2F obj2, float radius2)
+	{
+		float distance = sqrtf(powf((obj2.x - obj1.x), 2) + (powf((obj2.y - obj1.y), 2)));
+		if (distance <= radius1 + radius2)
+		{
+			return true;
+		}
+		return false;
+	}
+};

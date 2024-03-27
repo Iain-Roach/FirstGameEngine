@@ -7,6 +7,7 @@
 #include <filesystem>
 #include "Input.h"
 
+
 namespace Ferrus
 {
     EngineApp::EngineApp() :  hwnd(NULL), sprite(NULL)
@@ -54,7 +55,7 @@ namespace Ferrus
         Input& input = Input::GetInstance();
 
         float speed = 1.0f;
-        
+
 
 
 
@@ -64,7 +65,7 @@ namespace Ferrus
             if (entity == entt::entity(0))
             {
                 auto& transform = view.get<TransformComponent>(entity);
-                
+
                 if (input.KeyDown('W')) { transform.Pos.y += -speed; }
                 if (input.KeyDown('S')) { transform.Pos.y += speed; }
                 if (input.KeyDown('A')) { transform.Pos.x += -speed; }
@@ -82,6 +83,40 @@ namespace Ferrus
             }
             auto& sprite = view.get<SpriteComponent>(entity);
         }
+
+        auto collisionView = registry.view<CollisionComponent, TransformComponent>();
+            for (entt::entity entity : collisionView)
+            {
+                auto& collision = collisionView.get<CollisionComponent>(entity);
+                collision.IsColliding = false;
+            }
+            
+
+
+
+            for (entt::entity entity : collisionView)
+            {
+                auto& collision = collisionView.get<CollisionComponent>(entity);
+                auto& transform1 = collisionView.get<TransformComponent>(entity);
+
+                for (entt::entity otherEntity : collisionView)
+                {
+                    if (entity != otherEntity)
+                    {
+                        auto& otherCollision = collisionView.get<CollisionComponent>(otherEntity);
+                        auto& transform2 = collisionView.get<TransformComponent>(otherEntity);
+
+
+                        float distance = sqrtf(powf((transform2.Pos.x - transform1.Pos.x), 2) + (powf((transform2.Pos.y - transform1.Pos.y), 2)));
+                        if (distance <= collision.Radius + otherCollision.Radius)
+                        {
+                            collision.IsColliding = true;
+                            otherCollision.IsColliding = true;
+                        }
+                    }
+                    
+                }
+            }
 
     }
 
@@ -154,15 +189,25 @@ namespace Ferrus
         
 
         // Testing transform component:
-        auto view = registry.view<TransformComponent>();
+        auto view = registry.view<TransformComponent, CollisionComponent>();
         for (auto entity : view)
         {
             auto& transformComp = view.get<TransformComponent>(entity);
+            auto& collisionComp = view.get<CollisionComponent>(entity);
 
-
-
-            graphics->DrawCircle(transformComp.Pos.x, transformComp.Pos.y, 10.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+            if (collisionComp.IsColliding)
+            {
+                graphics->DrawCircle(transformComp.Pos.x, transformComp.Pos.y, collisionComp.Radius, 0.0f, 1.0f, 1.0f, 1.0f);
+            }
+            else
+            {
+                graphics->DrawCircle(transformComp.Pos.x, transformComp.Pos.y, collisionComp.Radius, 1.0f, 0.0f, 1.0f, 1.0f);
+            }
+            
         }
+
+
+        
 
 
 

@@ -36,6 +36,8 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	app->GetRegistry().emplace<TransformComponent>(entt2, D2D1::Point2F(16.0f, 584.0f), 45.0f, D2D1::Point2F(3.0f, 3.0f));
 	app->GetRegistry().emplace<TransformComponent>(entt3, D2D1::Point2F(100.0f, 200.0f), 0.0f, D2D1::Point2F(2.0f, 2.0f));
 	app->GetRegistry().emplace<TransformComponent>(entt4, D2D1::Point2F(700.0f, 500.0f), 315.0f, D2D1::Point2F(4.0f, 4.0f));
+	app->GetRegistry().emplace<CollisionComponent>(spriteEntityTest, 10.0f, false);
+	app->GetRegistry().emplace<CollisionComponent>(entt1, 45.0f, false);
 
 
 
