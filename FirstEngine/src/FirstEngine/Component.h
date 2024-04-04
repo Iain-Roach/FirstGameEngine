@@ -66,3 +66,10 @@ struct CollisionComponent {
 		return false;
 	}
 };
+
+struct ScriptComponent {
+	float Value;
+	ScriptComponent() = default;
+	ScriptComponent(const ScriptComponent&) = default;
+	ScriptComponent(float value) : Value(value) {}
+};
