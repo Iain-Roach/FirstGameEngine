@@ -68,8 +68,8 @@ struct CollisionComponent {
 };
 
 struct ScriptComponent {
-	float Value;
+	const char* ScriptName;
 	ScriptComponent() = default;
 	ScriptComponent(const ScriptComponent&) = default;
-	ScriptComponent(float value) : Value(value) {}
+	ScriptComponent(const char* scriptName) : ScriptName(scriptName) {}
 };

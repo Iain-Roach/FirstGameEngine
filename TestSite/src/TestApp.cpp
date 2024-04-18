@@ -1,5 +1,6 @@
 #include <Ferrus.h>
-
+#include "../../Externals/lua/lua.hpp"
+#include "../../Externals/sol/sol.hpp"
 class TestSite : public Ferrus::EngineApp
 {
 public:
@@ -19,6 +20,30 @@ private:
 Ferrus::EngineApp* Ferrus::CreateApplication()
 {
 	Ferrus::EngineApp* app = new Ferrus::EngineApp;
+	/*sol::state lua{};
+	lua.open_libraries(sol::lib::base);
+	lua.script("print('Hello World From Lua!')");
+	lua.script_file("script.lua");*/
+	//sol::state lua{};
+	app->lua.open_libraries(sol::lib::base);
+	//app->lua.script_file("script.lua");
+	const char test[11] = "script.lua";
+	app->lua.script_file(test);
+
+	const std::function<float(float)>& luaMoveY = app->lua["MoveY"];
+	auto testVar = luaMoveY(12);
+
+
+
+
+
+
+
+
+	ScriptComponent testScript = ScriptComponent("script.lua");
+
+
+
 	SpriteComponent sprite = SpriteComponent(L"Assets\\TestSprite.png");
 	entt::entity spriteEntityTest = app->GetRegistry().create();
 	app->GetRegistry().emplace<SpriteComponent>(spriteEntityTest, sprite);
@@ -38,7 +63,7 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	app->GetRegistry().emplace<TransformComponent>(entt4, D2D1::Point2F(700.0f, 500.0f), 315.0f, D2D1::Point2F(4.0f, 4.0f));
 	app->GetRegistry().emplace<CollisionComponent>(spriteEntityTest, 10.0f, false);
 	app->GetRegistry().emplace<CollisionComponent>(entt1, 45.0f, false);
-
+	app->GetRegistry().emplace<ScriptComponent>(entt1, testScript);
 
 
 	// Currently error watch D2D tutorial : https://www.youtube.com/watch?v=RKZvT4U71rg might restructure EngineApp entirely to implement working sprites lsdkfjs

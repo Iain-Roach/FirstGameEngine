@@ -1,4 +1,5 @@
 #pragma once
+//#define SOL_NO_EXCEPTIONS 1
 #include "EngineCore.h"
 #include "Registry.h"
 #include <vector>
@@ -7,6 +8,8 @@
 #include "Graphics.h"
 #include "Sprite.h"
 #include "../../ExternalHeaders/entt.hpp"
+#include "../../../Externals/lua/lua.hpp"
+#include "../../../Externals/sol/sol.hpp"
 #include "Component.h"
 #include "FileLoader.h"
 namespace Ferrus {
@@ -31,7 +34,7 @@ namespace Ferrus {
 		
 		
 		
-
+		sol::state lua;
 	private:
 		HRESULT initGraphics(HWND hwnd);
 
@@ -54,6 +57,7 @@ namespace Ferrus {
 		Sprite* sprite;
 		Graphics* graphics;
 		entt::registry registry;
+		
 	};
 	
 	// Create App here

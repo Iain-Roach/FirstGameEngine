@@ -4,8 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSite", "TestSite\TestSite.vcxproj", "{6EE89E65-8379-4C25-A4E4-D2AB834DCEBD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{17C043C3-B425-410E-9581-4B9B053E9983} = {17C043C3-B425-410E-9581-4B9B053E9983}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FirstEngine", "FirstEngine\FirstEngine.vcxproj", "{D298CDA9-5729-4B95-A6CD-8B753C66EB1B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{17C043C3-B425-410E-9581-4B9B053E9983} = {17C043C3-B425-410E-9581-4B9B053E9983}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua", "Lua\Lua.vcxproj", "{17C043C3-B425-410E-9581-4B9B053E9983}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,10 @@ Global
 		{D298CDA9-5729-4B95-A6CD-8B753C66EB1B}.Debug|x64.Build.0 = Debug|x64
 		{D298CDA9-5729-4B95-A6CD-8B753C66EB1B}.Release|x64.ActiveCfg = Release|x64
 		{D298CDA9-5729-4B95-A6CD-8B753C66EB1B}.Release|x64.Build.0 = Release|x64
+		{17C043C3-B425-410E-9581-4B9B053E9983}.Debug|x64.ActiveCfg = Debug|x64
+		{17C043C3-B425-410E-9581-4B9B053E9983}.Debug|x64.Build.0 = Debug|x64
+		{17C043C3-B425-410E-9581-4B9B053E9983}.Release|x64.ActiveCfg = Release|x64
+		{17C043C3-B425-410E-9581-4B9B053E9983}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

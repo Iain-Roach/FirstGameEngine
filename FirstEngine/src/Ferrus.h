@@ -1,4 +1,7 @@
 #pragma once
+// #define SOL_NO_EXCEPTIONS 1
+#include "../../Externals/lua/lua.hpp"
+#include "../../Externals/sol/sol.hpp"
 
 #include "FirstEngine/EngineApp.h"
 #include "FirstEngine/Component.h"
