@@ -134,13 +134,13 @@ namespace Ferrus
 		{
 			auto& script = scriptView.get<ScriptComponent>(entity);
 			auto& transform = scriptView.get<TransformComponent>(entity);
-
-			//lua.script_file(script.ScriptName);
-			//const std::function<float(float)>& MoveX = lua["MoveX"];
-			/*const std::function<float(float)>& luaMoveX = lua["MoveX"];
+			
+			lua.script_file(script.ScriptName);
+			const std::function<float(float)>& MoveX = lua["MoveX"];
+			const std::function<float(float)>& luaMoveX = lua["MoveX"];
 			const std::function<float(float)>& luaMoveY = lua["MoveY"];
 			transform.Pos.x += luaMoveX(1);
-			transform.Pos.y += luaMoveY(1);*/
+			transform.Pos.y += luaMoveY(1);
 			
 		}
 

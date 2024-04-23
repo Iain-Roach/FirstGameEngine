@@ -27,20 +27,20 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	//sol::state lua{};
 	app->lua.open_libraries(sol::lib::base);
 	//app->lua.script_file("script.lua");
-	const char test[11] = "script.lua";
-	app->lua.script_file(test);
+	const char* script = "src/script.lua";
+	//app->lua.script_file(script);
 
-	const std::function<float(float)>& luaMoveY = app->lua["MoveY"];
-	auto testVar = luaMoveY(12);
-
-
+	//const std::function<float(float)>& luaMoveY = app->lua["MoveY"];
+	//auto testVar = luaMoveY(12);
 
 
 
 
 
 
-	ScriptComponent testScript = ScriptComponent("script.lua");
+
+
+	ScriptComponent testScript = ScriptComponent("src/script.lua");
 
 
 
