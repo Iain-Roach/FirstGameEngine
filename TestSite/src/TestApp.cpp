@@ -17,6 +17,10 @@ private:
 };
 
 
+
+
+
+
 Ferrus::EngineApp* Ferrus::CreateApplication()
 {
 	Ferrus::EngineApp* app = new Ferrus::EngineApp;
@@ -26,6 +30,7 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	lua.script_file("script.lua");*/
 	//sol::state lua{};
 	app->lua.open_libraries(sol::lib::base);
+	app->lua.open_libraries(sol::lib::math);
 	//app->lua.script_file("script.lua");
 	const char* script = "src/script.lua";
 	//app->lua.script_file(script);
@@ -33,15 +38,23 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	//const std::function<float(float)>& luaMoveY = app->lua["MoveY"];
 	//auto testVar = luaMoveY(12);
 
+	/*app->lua.new_usertype<Asteroid>("Asteroid",
+		sol::constructors<void(), void(const Asteroid), void(TransformComponent, SpriteComponent, CollisionComponent, ScriptComponent)>(),
+		"tc", &Asteroid::transformComponent,
+		"sc", &Asteroid::spriteComponent,
+		"cc", &Asteroid::collisiontComponent,
+		"script", &Asteroid::scriptComponent);*/
+
+	TransformComponent asteroidTransform = TransformComponent(D2D1::Point2F(100.0f, 100.0f), 0.0f, D2D1::Point2F(1.0f, 1.0f));
+	SpriteComponent asteroidSprite = SpriteComponent(L"Assets\\TestSprite.png");
+	CollisionComponent asteroidCollision = CollisionComponent(20.0f, false);
+	ScriptComponent asteroidsScript = ScriptComponent("src/asteroid.lua");
+	app->asteroidGO = AsteroidComponent(asteroidTransform, asteroidSprite, asteroidCollision, asteroidsScript);
 
 
-
-
-
-
-
-	ScriptComponent testScript = ScriptComponent("src/script.lua");
-
+	
+	ScriptComponent testScript = ScriptComponent("src/asteroid.lua");
+	ScriptComponent asteroidScript = ScriptComponent("src/asteroid.lua");
 
 
 	SpriteComponent sprite = SpriteComponent(L"Assets\\TestSprite.png");
@@ -53,6 +66,7 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	entt::entity entt2 = app->GetRegistry().create();
 	entt::entity entt3 = app->GetRegistry().create();
 	entt::entity entt4 = app->GetRegistry().create();
+	entt::entity asteroidEntt = app->GetRegistry().create();
 	app->GetRegistry().emplace<SpriteComponent>(entt1, sprite);
 	app->GetRegistry().emplace<SpriteComponent>(entt2, sprite);
 	app->GetRegistry().emplace<SpriteComponent>(entt3, sprite);
@@ -64,6 +78,14 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	app->GetRegistry().emplace<CollisionComponent>(spriteEntityTest, 10.0f, false);
 	app->GetRegistry().emplace<CollisionComponent>(entt1, 45.0f, false);
 	app->GetRegistry().emplace<ScriptComponent>(entt1, testScript);
+	app->GetRegistry().emplace<AsteroidComponent>(entt1, app->asteroidGO);
+
+	app->GetRegistry().emplace<TransformComponent>(asteroidEntt, asteroidTransform);
+	app->GetRegistry().emplace<SpriteComponent>(asteroidEntt, asteroidSprite);
+	app->GetRegistry().emplace<CollisionComponent>(asteroidEntt, asteroidCollision);
+	app->GetRegistry().emplace<ScriptComponent>(asteroidEntt, asteroidsScript);
+	app->GetRegistry().emplace<AsteroidComponent>(asteroidEntt, app->asteroidGO);
+
 
 
 	// Currently error watch D2D tutorial : https://www.youtube.com/watch?v=RKZvT4U71rg might restructure EngineApp entirely to implement working sprites lsdkfjs

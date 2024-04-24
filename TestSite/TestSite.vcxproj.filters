@@ -26,5 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\script.lua" />
+    <None Include="src\asteroid.lua" />
   </ItemGroup>
 </Project>

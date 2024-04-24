@@ -90,7 +90,34 @@ namespace Ferrus
 			auto& sprite = view.get<SpriteComponent>(entity);
 		}
 
+		auto asteroidView = registry.view<AsteroidComponent>();
+		if (asteroidView.size() < MAX_ASTEROIDS)
+		{
+			// Create New Asteroids
+			entt::entity asteroid = registry.create();
+			AsteroidComponent ac = asteroidGO;
+			TransformComponent asteroidTransform = TransformComponent(D2D1::Point2F(1 + std::rand() % 799, 1 + std::rand() % 599), 0.0f, D2D1::Point2F(1.0f, 1.0f));
+			SpriteComponent asteroidSprite = SpriteComponent(L"Assets\\TestSprite.png");
+			CollisionComponent asteroidCollision = CollisionComponent(20.0f, false);
+			ScriptComponent asteroidsScript = ScriptComponent("src/asteroid.lua");
+			ac.SetSpeedX(2 * static_cast<float>(std::rand()) / RAND_MAX - 1);
+			ac.SetSpeedY(2 * static_cast<float>(std::rand()) / RAND_MAX - 1);
+
+			registry.emplace<AsteroidComponent>(asteroid, ac);
+			registry.emplace<TransformComponent>(asteroid, asteroidTransform);
+			registry.emplace<SpriteComponent>(asteroid, asteroidSprite);
+			registry.emplace<CollisionComponent>(asteroid, asteroidCollision);
+			registry.emplace<ScriptComponent>(asteroid, asteroidsScript);
+
+		}
+		for (entt::entity entity : asteroidView)
+		{
 		
+		}
+
+
+
+
 			// Checks components that have collision component and transform component
 		{
 			auto collisionView = registry.view<CollisionComponent, TransformComponent>();
@@ -128,19 +155,26 @@ namespace Ferrus
 			}
 		}
 
+
+
 		// Checks components that have scripts attached and runs them
-		auto scriptView = registry.view<ScriptComponent, TransformComponent>();
+		auto scriptView = registry.view<ScriptComponent, TransformComponent, AsteroidComponent>();
 		for (entt::entity entity : scriptView)
 		{
 			auto& script = scriptView.get<ScriptComponent>(entity);
 			auto& transform = scriptView.get<TransformComponent>(entity);
+			auto& asteroidComp = scriptView.get<AsteroidComponent>(entity);
 			
 			lua.script_file(script.ScriptName);
-			const std::function<float(float)>& MoveX = lua["MoveX"];
 			const std::function<float(float)>& luaMoveX = lua["MoveX"];
 			const std::function<float(float)>& luaMoveY = lua["MoveY"];
-			transform.Pos.x += luaMoveX(1);
-			transform.Pos.y += luaMoveY(1);
+			const std::function<float(float)>& wrapX = lua["AsteroidWrapX"];
+			const std::function<float(float)>& wrapY = lua["AsteroidWrapY"];
+			transform.Pos.x = wrapX(transform.Pos.x);
+			transform.Pos.y = wrapY(transform.Pos.y);
+			transform.Pos.x += luaMoveX(asteroidComp.GetSpeedX());
+			transform.Pos.y += luaMoveY(asteroidComp.GetSpeedY());
+			
 			
 		}
 
@@ -224,6 +258,7 @@ namespace Ferrus
 			if (collisionComp.IsColliding)
 			{
 				graphics->DrawCircle(transformComp.Pos.x, transformComp.Pos.y, collisionComp.Radius, 0.0f, 1.0f, 1.0f, 1.0f);
+				registry.destroy(entity);
 			}
 			else
 			{
@@ -363,8 +398,8 @@ namespace Ferrus
 
 		// sol::state lua{};
 
-
-
+		std::srand(std::time(nullptr));
+		
 		return S_OK;
 	}
 

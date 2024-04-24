@@ -33,7 +33,8 @@ namespace Ferrus {
 		HRESULT Initialize(HINSTANCE hInstance, int nCmdShow);
 		
 		
-		
+		AsteroidComponent asteroidGO;
+		const int MAX_ASTEROIDS = 3;
 		sol::state lua;
 	private:
 		HRESULT initGraphics(HWND hwnd);

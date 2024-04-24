@@ -73,3 +73,39 @@ struct ScriptComponent {
 	ScriptComponent(const ScriptComponent&) = default;
 	ScriptComponent(const char* scriptName) : ScriptName(scriptName) {}
 };
+
+
+
+struct AsteroidComponent
+{
+	TransformComponent transformComponent;
+	SpriteComponent spriteComponent;
+	CollisionComponent collisiontComponent;
+	ScriptComponent scriptComponent;
+	float speedX;
+	float speedY;
+
+	AsteroidComponent() = default;
+	AsteroidComponent(const AsteroidComponent&) = default;
+	AsteroidComponent(TransformComponent tc, SpriteComponent sc, CollisionComponent cc, ScriptComponent script, float speedX = 1.0f, float speedY = 1.0f) : transformComponent(tc), spriteComponent(sc), collisiontComponent(cc), scriptComponent(script), speedX(speedX), speedY(speedY) {}
+
+	float GetSpeedX()
+	{
+		return speedX;
+	}
+
+	void SetSpeedX(float value)
+	{
+		speedX = value;
+	}
+
+	float GetSpeedY()
+	{
+		return speedY;
+	}
+
+	void SetSpeedY(float value)
+	{
+		speedY = value;
+	}
+};
