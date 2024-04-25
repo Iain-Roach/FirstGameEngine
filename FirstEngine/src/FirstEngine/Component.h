@@ -109,3 +109,26 @@ struct AsteroidComponent
 		speedY = value;
 	}
 };
+
+struct BulletComponent
+{
+	int direction;
+	float speed = 1.5f;
+	TransformComponent transformComponent;
+	CollisionComponent collisionComponent;
+
+	BulletComponent() = default;
+	BulletComponent(const BulletComponent&) = default;
+	BulletComponent(TransformComponent tc, CollisionComponent cc, int direction) : transformComponent(tc), collisionComponent(cc), direction(direction) {}
+
+	int GetDirection()
+	{
+		return direction;
+	}
+
+	void SetDirection(int x)
+	{
+		direction = x;
+	}
+};
+

@@ -68,13 +68,13 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	entt::entity entt4 = app->GetRegistry().create();
 	entt::entity asteroidEntt = app->GetRegistry().create();
 	app->GetRegistry().emplace<SpriteComponent>(entt1, sprite);
-	app->GetRegistry().emplace<SpriteComponent>(entt2, sprite);
+	/*app->GetRegistry().emplace<SpriteComponent>(entt2, sprite);
 	app->GetRegistry().emplace<SpriteComponent>(entt3, sprite);
-	app->GetRegistry().emplace<SpriteComponent>(entt4, sprite);
+	app->GetRegistry().emplace<SpriteComponent>(entt4, sprite);*/
 	app->GetRegistry().emplace<TransformComponent>(entt1, D2D1::Point2F(400.0f, 300.0f), 180.0f, D2D1::Point2F(6.0f, 6.0f));
-	app->GetRegistry().emplace<TransformComponent>(entt2, D2D1::Point2F(16.0f, 584.0f), 45.0f, D2D1::Point2F(3.0f, 3.0f));
+	/*app->GetRegistry().emplace<TransformComponent>(entt2, D2D1::Point2F(16.0f, 584.0f), 45.0f, D2D1::Point2F(3.0f, 3.0f));
 	app->GetRegistry().emplace<TransformComponent>(entt3, D2D1::Point2F(100.0f, 200.0f), 0.0f, D2D1::Point2F(2.0f, 2.0f));
-	app->GetRegistry().emplace<TransformComponent>(entt4, D2D1::Point2F(700.0f, 500.0f), 315.0f, D2D1::Point2F(4.0f, 4.0f));
+	app->GetRegistry().emplace<TransformComponent>(entt4, D2D1::Point2F(700.0f, 500.0f), 315.0f, D2D1::Point2F(4.0f, 4.0f));*/
 	app->GetRegistry().emplace<CollisionComponent>(spriteEntityTest, 10.0f, false);
 	app->GetRegistry().emplace<CollisionComponent>(entt1, 45.0f, false);
 	app->GetRegistry().emplace<ScriptComponent>(entt1, testScript);

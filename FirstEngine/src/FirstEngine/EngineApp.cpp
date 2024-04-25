@@ -78,8 +78,53 @@ namespace Ferrus
 				if (input.KeyDown('D')) { transform.Pos.x += speed; }
 
 
+				// Add timer or something here
+				
+				
 
+				// Spawns and shoots bullet up/down/left/right
+				if (input.KeyPress('I')) {
+					entt::entity bullet = registry.create();
+					TransformComponent bulletTransform = TransformComponent(D2D1::Point2F(transform.Pos.x, transform.Pos.y - 25.0f), 0.0f, D2D1::Point2F(1.0f, 1.0f));
+					CollisionComponent bulletCollision = CollisionComponent(6.0f, false);
+					BulletComponent b = BulletComponent(bulletTransform, bulletCollision, 0);
+					
+					registry.emplace<BulletComponent>(bullet, b);
+					registry.emplace<TransformComponent>(bullet, bulletTransform);
+					registry.emplace<CollisionComponent>(bullet, bulletCollision);
+				}
+				if (input.KeyPress('K')) {
+					entt::entity bullet = registry.create();
+					TransformComponent bulletTransform = TransformComponent(D2D1::Point2F(transform.Pos.x, transform.Pos.y + 25.0f), 0.0f, D2D1::Point2F(1.0f, 1.0f));
+					CollisionComponent bulletCollision = CollisionComponent(6.0f, false);
+					BulletComponent b = BulletComponent(bulletTransform, bulletCollision, 1);
 
+					registry.emplace<BulletComponent>(bullet, b);
+					registry.emplace<TransformComponent>(bullet, bulletTransform);
+					registry.emplace<CollisionComponent>(bullet, bulletCollision);
+				}
+				if (input.KeyPress('J')) {
+					entt::entity bullet = registry.create();
+					TransformComponent bulletTransform = TransformComponent(D2D1::Point2F(transform.Pos.x - 25.0f, transform.Pos.y), 0.0f, D2D1::Point2F(1.0f, 1.0f));
+					CollisionComponent bulletCollision = CollisionComponent(6.0f, false);
+					BulletComponent b = BulletComponent(bulletTransform, bulletCollision, 2);
+
+					registry.emplace<BulletComponent>(bullet, b);
+					registry.emplace<TransformComponent>(bullet, bulletTransform);
+					registry.emplace<CollisionComponent>(bullet, bulletCollision);
+				}
+				if (input.KeyPress('L')) {
+					entt::entity bullet = registry.create();
+					TransformComponent bulletTransform = TransformComponent(D2D1::Point2F(transform.Pos.x + 25.0f, transform.Pos.y), 0.0f, D2D1::Point2F(1.0f, 1.0f));
+					CollisionComponent bulletCollision = CollisionComponent(6.0f, false);
+					BulletComponent b = BulletComponent(bulletTransform, bulletCollision, 3);
+
+					registry.emplace<BulletComponent>(bullet, b);
+					registry.emplace<TransformComponent>(bullet, bulletTransform);
+					registry.emplace<CollisionComponent>(bullet, bulletCollision);
+				}
+
+				
 
 
 
@@ -96,7 +141,7 @@ namespace Ferrus
 			// Create New Asteroids
 			entt::entity asteroid = registry.create();
 			AsteroidComponent ac = asteroidGO;
-			TransformComponent asteroidTransform = TransformComponent(D2D1::Point2F(1 + std::rand() % 799, 1 + std::rand() % 599), 0.0f, D2D1::Point2F(1.0f, 1.0f));
+			TransformComponent asteroidTransform = TransformComponent(D2D1::Point2F(1 + std::rand() % 799, 1 + std::rand() % 599), 0.0f, D2D1::Point2F(1.5f, 1.5f));
 			SpriteComponent asteroidSprite = SpriteComponent(L"Assets\\TestSprite.png");
 			CollisionComponent asteroidCollision = CollisionComponent(20.0f, false);
 			ScriptComponent asteroidsScript = ScriptComponent("src/asteroid.lua");
@@ -178,6 +223,31 @@ namespace Ferrus
 			
 		}
 
+
+		// Bullet Move Ahhhhhhhhhhhhhh
+		auto bulletView = registry.view<BulletComponent,TransformComponent>();
+		for (entt::entity entity : bulletView)
+		{
+			auto& bullet = bulletView.get<BulletComponent>(entity);
+			auto& transform = bulletView.get<TransformComponent>(entity);
+
+			switch (bullet.direction)
+			{
+			case 0:
+				transform.Pos.y -= bullet.speed;
+				break;
+			case 1:
+				transform.Pos.y += bullet.speed;
+				break;
+			case 2:
+				transform.Pos.x -= bullet.speed;
+				break;
+			case 3:
+				transform.Pos.x += bullet.speed;
+				break;
+			}
+		}
+
 	}
 
 	void EngineApp::OnRender()
@@ -187,16 +257,16 @@ namespace Ferrus
 		graphics->ClearScreen(0.3f, 0.3f, 0.5f);
 		RECT clientRect;
 		GetClientRect(hwnd, &clientRect);
-		graphics->DrawCircle(375.0f, yPos, 50.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+		//graphics->DrawCircle(375.0f, yPos, 50.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 		// rotates clockwise 20 degrees.
-		graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Rotation(90, D2D1::Point2F(50, 50)));                      // For rotations we would have to rotate the render target before and after each draw. would use the transform component for center position of rotation
+		//graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Rotation(90, D2D1::Point2F(50, 50)));                      // For rotations we would have to rotate the render target before and after each draw. would use the transform component for center position of rotation
 		// test circle to get location on rendertarget
-		graphics->DrawCircle(50, 50, 5, 1.0f, 0.0f, 0.0f, 1.0f);
+		//graphics->DrawCircle(50, 50, 5, 1.0f, 0.0f, 0.0f, 1.0f);
 
 		// Scaling sprite still needs the center of the sprite
-		graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Scale(4.0f, 4.0f, D2D1::Point2F(50, 50)));
+		//graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Scale(4.0f, 4.0f, D2D1::Point2F(50, 50)));
 
-		sprite->Draw(50.0f, 50); // We can pass the transform from the transform component as a value when drawing the sprite component.
+		//sprite->Draw(50.0f, 50); // We can pass the transform from the transform component as a value when drawing the sprite component.
 		graphics->getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
 
 
