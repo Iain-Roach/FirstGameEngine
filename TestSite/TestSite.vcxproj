@@ -100,6 +100,7 @@
     <ClCompile Include="src\TestApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Assets\Asteroid.png" />
     <Image Include="Assets\TestSprite.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>

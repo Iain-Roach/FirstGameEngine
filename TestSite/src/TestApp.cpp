@@ -46,7 +46,7 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 		"script", &Asteroid::scriptComponent);*/
 
 	TransformComponent asteroidTransform = TransformComponent(D2D1::Point2F(100.0f, 100.0f), 0.0f, D2D1::Point2F(1.0f, 1.0f));
-	SpriteComponent asteroidSprite = SpriteComponent(L"Assets\\TestSprite.png");
+	SpriteComponent asteroidSprite = SpriteComponent(L"Assets\\Asteroid.png");
 	CollisionComponent asteroidCollision = CollisionComponent(20.0f, false);
 	ScriptComponent asteroidsScript = ScriptComponent("src/asteroid.lua");
 	app->asteroidGO = AsteroidComponent(asteroidTransform, asteroidSprite, asteroidCollision, asteroidsScript);
@@ -67,7 +67,7 @@ Ferrus::EngineApp* Ferrus::CreateApplication()
 	entt::entity entt3 = app->GetRegistry().create();
 	entt::entity entt4 = app->GetRegistry().create();
 	entt::entity asteroidEntt = app->GetRegistry().create();
-	app->GetRegistry().emplace<SpriteComponent>(entt1, sprite);
+	app->GetRegistry().emplace<SpriteComponent>(entt1, asteroidSprite);
 	/*app->GetRegistry().emplace<SpriteComponent>(entt2, sprite);
 	app->GetRegistry().emplace<SpriteComponent>(entt3, sprite);
 	app->GetRegistry().emplace<SpriteComponent>(entt4, sprite);*/

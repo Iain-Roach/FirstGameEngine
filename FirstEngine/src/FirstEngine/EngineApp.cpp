@@ -141,8 +141,8 @@ namespace Ferrus
 			// Create New Asteroids
 			entt::entity asteroid = registry.create();
 			AsteroidComponent ac = asteroidGO;
-			TransformComponent asteroidTransform = TransformComponent(D2D1::Point2F(1 + std::rand() % 799, 1 + std::rand() % 599), 0.0f, D2D1::Point2F(1.5f, 1.5f));
-			SpriteComponent asteroidSprite = SpriteComponent(L"Assets\\TestSprite.png");
+			TransformComponent asteroidTransform = TransformComponent(D2D1::Point2F(798 + std::rand() % 799, 598 + std::rand() % 599), 0.0f, D2D1::Point2F(1.5f, 1.5f));
+			SpriteComponent asteroidSprite = SpriteComponent(L"Assets\\Asteroid.png");
 			CollisionComponent asteroidCollision = CollisionComponent(20.0f, false);
 			ScriptComponent asteroidsScript = ScriptComponent("src/asteroid.lua");
 			ac.SetSpeedX(2 * static_cast<float>(std::rand()) / RAND_MAX - 1);
@@ -245,6 +245,16 @@ namespace Ferrus
 			case 3:
 				transform.Pos.x += bullet.speed;
 				break;
+			}
+
+			if (transform.Pos.x > 800 || transform.Pos.x < 0)
+			{
+				// Destroy
+				registry.destroy(entity);
+			}
+			if (transform.Pos.y > 600 || transform.Pos.y < 0)
+			{
+				registry.destroy(entity);
 			}
 		}
 
